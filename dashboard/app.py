@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -83,10 +85,13 @@ PLOT_LAYOUT = dict(
 )
 
 # ===== 加载数据 =====
+DATA_DIR = Path(__file__).resolve().parents[1] / "data"
+
+
 @st.cache_data
 def load_data():
-    df = pd.read_csv(r"C:\Users\ROG\Desktop\ecommerce-user-analysis\data\retail_cleaned.csv", parse_dates=["InvoiceDate"])
-    rfm = pd.read_csv(r"C:\Users\ROG\Desktop\ecommerce-user-analysis\data\rfm_clustered.csv", index_col="Customer ID")
+    df = pd.read_csv(DATA_DIR / "retail_cleaned.csv", parse_dates=["InvoiceDate"])
+    rfm = pd.read_csv(DATA_DIR / "rfm_clustered.csv", index_col="Customer ID")
     return df, rfm
 
 df, rfm = load_data()

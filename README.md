@@ -1,332 +1,315 @@
-# E-Commerce User Behavior Analysis
+<div align="center">
 
-**[中文版 →](README_CN.md)**
+# 🛍️ E-Commerce User Analysis
 
-**Data-Driven Customer Segmentation & Growth Strategy Using RFM + K-Means Clustering**
+### *Turn two years of retail transactions into inspectable customer segments, cluster cross-checks, and strategy hypotheses.*
 
-> Analyzed ~1M real transaction records from the UCI Online Retail II dataset, delivering a complete pipeline from data cleaning to actionable product strategy recommendations.
+[![Jupyter](https://img.shields.io/badge/Jupyter-5_Notebooks-F37626?logo=jupyter&logoColor=white)](#analysis-tracks)
+[![Kernel](https://img.shields.io/badge/Kernel-Python_3.13.5-7C3AED?logo=python&logoColor=white)](#reproduce)
+[![Dataset](https://img.shields.io/badge/Data-UCI_Online_Retail_II-2563EB)](https://archive.ics.uci.edu/dataset/502/online+retail+ii)
+[![Analysis](https://img.shields.io/badge/Analysis-RFM_%2B_K--Means-16A34A)](#methodology)
+[![Stars](https://img.shields.io/github/stars/okht/ecommerce-user-analysis?style=social)](https://github.com/okht/ecommerce-user-analysis)
+
+[![Dashboard](https://img.shields.io/badge/Dashboard-Streamlit_source-F97316?logo=streamlit&logoColor=white)](#dashboard)
+[![Records](https://img.shields.io/badge/Records-1%2C067%2C371-0D9488)](#snapshot)
+[![Outputs](https://img.shields.io/badge/Outputs-3_CSV_files-0891B2)](#generated-files)
+[![Boundary](https://img.shields.io/badge/Data-not_bundled-EF4444)](#data-and-citation)
+
+<br>
+
+<table>
+<tr><td align="left">
+
+🧹 &nbsp;1,067,371 transactions contain missing IDs, cancellations, and nonpositive values.<br>
+📊 &nbsp;Median customer spend is £899 while the mean reaches £3,019.<br>
+🔍 &nbsp;Rule-based RFM groups can hide extreme and wholesale-like customer behavior.
+
+</td></tr>
+</table>
+
+### ✨ Turn raw transactions into traceable segment evidence without hiding cleaning decisions or model limits.
+
+**UCI workbook → cleaning → EDA + RFM → K-Means cross-check → CSV artifacts + dashboard views**
+
+<br>
+
+[📚 Snapshot](#snapshot) · [🔬 Analysis](#analysis-tracks) · [📈 Results](#recorded-results) · [🗺️ Workflow](#workflow) · [🚀 Reproduce](#reproduce) · [🛡️ Data](#data-and-citation) · [🧪 Verification](#verification) · [📁 Structure](#project-structure) · [📌 Limitations](#limitations)
+
+[**English**](README.md) · [**简体中文**](README_CN.md) · [**Español**](README_ES.md) · [**Deutsch**](README_DE.md) · [**日本語**](README_JA.md) · [**Русский**](README_RU.md) · [**Português**](README_PT.md) · [**한국어**](README_KO.md)
+
+</div>
 
 ---
 
-## 📌 Background
+<a id="snapshot"></a>
 
-In e-commerce, customer value varies dramatically — a small number of high-value customers often account for the majority of revenue. This project validates that hypothesis through data and produces differentiated operational strategies based on customer segmentation.
+## 📚 Snapshot
 
-**Key Finding: 22% of customers contribute 68% of total revenue.**
+The committed notebooks analyze the UCI Online Retail II workbook and retain their recorded outputs for inspection.
+
+| Measure | Recorded value | Evidence boundary |
+|---|---:|---|
+| **Raw transactions** | 1,067,371 rows · 8 fields | Two workbook sheets |
+| **Cleaned transactions** | 805,549 rows | Missing customer IDs, cancellations, and nonpositive values removed |
+| **Time window** | 2009-12-01 → 2011-12-09 | Historical retail data |
+| **Entities** | 5,878 customers · 36,969 orders · 4,631 products · 41 countries | Derived from the cleaned snapshot |
+| **Recorded revenue** | £17,743,429 | `Quantity × Price` after cleaning |
 
 ---
 
-## 🔬 Analysis Pipeline
+<a id="analysis-tracks"></a>
+
+## 🔬 Analysis tracks
+
+| Notebook | Track | Recorded artifact |
+|---|---|---|
+| **`01_data_cleaning.ipynb`** | Loads both sheets, audits quality, and applies cleaning rules | `retail_cleaned.csv` |
+| **`02_eda.ipynb.ipynb`** | Explores time, geography, products, and customer distributions | Saved tables and figures |
+| **`03_rfm_analysis.ipynb.ipynb`** | Scores Recency, Frequency, and Monetary value into eight rule-based groups | `rfm_result.csv` |
+| **`04_clustering.ipynb.ipynb`** | Standardizes R/F/M, fits K-Means, and compares clusters with RFM groups | `rfm_clustered.csv` |
+| **`05_insights.ipynb.ipynb`** | Summarizes segments and writes recommendations and experiment hypotheses | Saved strategy tables and figures |
+
+---
+
+<a id="recorded-results"></a>
+
+## 📈 Recorded results
+
+These values come from outputs stored inside the committed notebooks. They have not been rerun from the unbundled source workbook during this README update.
+
+| Area | Recorded result | Interpretation boundary |
+|---|---|---|
+| **Data quality** | 243,007 missing customer IDs · 19,494 cancellation rows | Issue counts overlap |
+| **Cleaning** | 805,549 of 1,067,371 rows retained | About 75.5% of the source rows |
+| **Market** | United Kingdom contributes 83.0% of recorded revenue | Descriptive result for this historical dataset |
+| **Products** | Top 20% contribute about 78.4% of revenue | Concentration within the cleaned snapshot |
+| **Customers** | Median spend £898.9 · mean £3,018.6 · maximum £608,821.6 | Strongly skewed distribution |
+| **RFM concentration** | 1,300 loyal high-value customers contribute 68.4% of revenue | 22.1% of the 5,878 customers |
+| **Cluster cross-check** | 1,326 of 1,523 RFM dormant customers enter the dormant low-value cluster | 87.1% overlap; no causal validation |
+
+---
+
+<a id="customer-segments"></a>
+
+## 🏷️ Customer segments
+
+| RFM segment | Customers | Revenue share | Recorded recommendation |
+|---|---:|---:|---|
+| **Loyal high-value** | 1,300 | 68.4% | Protect retention and test VIP treatment |
+| **High potential** | 975 | 13.8% | Test milestones and category expansion |
+| **At-risk high-value** | 227 | 5.7% | Prioritize win-back experiments |
+| **Regular** | 1,102 | 4.6% | Maintain standard engagement |
+| **Dormant** | 1,523 | 3.8% | Use low-cost, limited reactivation tests |
+| **New** | 443 | 2.2% | Test onboarding and second-order nudges |
+| **Frequent low-spend** | 182 | 0.9% | Explore cross-sell and order-value uplift |
+| **At-risk regular** | 126 | 0.6% | Monitor with low operational priority |
+
+Recommendations are hypotheses derived from descriptive segmentation. The repository contains no completed intervention or A/B-test results.
+
+---
+
+<a id="workflow"></a>
+
+## 🗺️ Workflow
 
 ```mermaid
-graph LR
-    A[📥 Raw Data<br/>1.07M transactions] --> B[🧹 Data Cleaning<br/>Missing values · Returns · Outliers]
-    B --> C[📊 EDA<br/>Time · Geography · Products · Users]
-    C --> D[🏷️ RFM Segmentation<br/>Recency · Frequency · Monetary]
-    D --> E[🤖 K-Means Validation<br/>Cross-verify segments]
-    E --> F[💡 Strategy<br/>Differentiated action plans]
-    F --> G[📊 Dashboard<br/>Interactive visualization]
+flowchart LR
+    N["Data not bundled"] -. prerequisite .-> A([UCI workbook])
 
-    style A fill:#1e1b4b,stroke:#818cf8,color:#e2e8f0
-    style B fill:#1e1b4b,stroke:#818cf8,color:#e2e8f0
-    style C fill:#1e1b4b,stroke:#34d399,color:#e2e8f0
-    style D fill:#1e1b4b,stroke:#34d399,color:#e2e8f0
-    style E fill:#1e1b4b,stroke:#fbbf24,color:#e2e8f0
-    style F fill:#1e1b4b,stroke:#f87171,color:#e2e8f0
-    style G fill:#1e1b4b,stroke:#c084fc,color:#e2e8f0
+    A --> B["Clean records"] --> C["retail_cleaned.csv"]
+    C --> D["EDA findings"] --> L([Recorded evidence])
+    C --> E["RFM · 8 segments"] --> F["rfm_result.csv"] --> L
+    F --> G["K-Means · 5 clusters"] --> H["rfm_clustered.csv"] --> L
+    H --> I["Strategy hypotheses"] --> L
+
+    style N fill:#FEF2F2,stroke:#EF4444,stroke-width:1px,color:#000,font-size:12px
+    style A fill:#FEF3C7,stroke:#F59E0B,stroke-width:2px,color:#000,font-size:12px
+    style B fill:#DBEAFE,stroke:#3B82F6,stroke-width:2px,color:#000,font-size:12px
+    style C fill:#EDE9FE,stroke:#8B5CF6,stroke-width:2px,color:#000,font-size:12px
+    style D fill:#DBEAFE,stroke:#3B82F6,stroke-width:1px,color:#000,font-size:12px
+    style E fill:#DBEAFE,stroke:#3B82F6,stroke-width:1px,color:#000,font-size:12px
+    style F fill:#EDE9FE,stroke:#8B5CF6,stroke-width:1px,color:#000,font-size:12px
+    style G fill:#DBEAFE,stroke:#3B82F6,stroke-width:1px,color:#000,font-size:12px
+    style H fill:#EDE9FE,stroke:#8B5CF6,stroke-width:1px,color:#000,font-size:12px
+    style I fill:#F1F5F9,stroke:#64748B,stroke-width:1px,color:#000,font-size:12px
+    style L fill:#DCFCE7,stroke:#22C55E,stroke-width:2px,color:#000,font-size:12px
 ```
 
 ---
 
-## 🧠 Analysis thinking chain
+<a id="methodology"></a>
 
-### Overview
+## ⚙️ Methodology
 
-```mermaid
-graph TD
-    Q0{"🤔 How different are<br/>customer values?"}
-    Q0 --> M["📊 01-02 Data prep<br/>Clean 1.07M records"]
-    M --> Q1{"What patterns are<br/>hidden in the data?"}
-    Q1 --> E["🔍 02 EDA<br/>Four-dimension exploration"]
-    E --> Q2{"How to segment<br/>the customers?"}
-    Q2 --> R["🏷️ 03 RFM<br/>Rule-based"]
-    Q2 --> K["🤖 04 K-Means<br/>Data-driven"]
-    R --> Q3{"Are the segments<br/>reliable?"}
-    K --> Q3
-    Q3 --> S["💡 05 Strategy<br/>+ Dashboard"]
-
-    style Q0 fill:#6366f1,stroke:#4f46e5,color:#fff
-    style Q1 fill:#f97316,stroke:#ea580c,color:#fff
-    style Q2 fill:#e74c3c,stroke:#dc2626,color:#fff
-    style Q3 fill:#2ecc71,stroke:#16a34a,color:#fff
-    style M fill:#ede9fe,stroke:#6366f1,color:#333
-    style E fill:#fff7ed,stroke:#f97316,color:#333
-    style R fill:#fee2e2,stroke:#e74c3c,color:#333
-    style K fill:#dbeafe,stroke:#3498db,color:#333
-    style S fill:#dcfce7,stroke:#2ecc71,color:#333
-```
-
-### Branch 1 — "Is the data clean?" → Data preparation
-
-```mermaid
-graph TD
-    ROOT["🧹 1.07M raw records<br/>Ready to use?"]
-
-    ROOT --> LOAD["Data loading<br/>2 sheets merged · 8 fields · 1,067,371 rows"]
-    ROOT --> QUALITY["Quality scan"]
-
-    QUALITY --> Q1["Customer ID missing<br/>243,007 rows (22.8%)"]
-    QUALITY --> Q2["Return orders<br/>Invoice starts with C · 19,494 rows"]
-    QUALITY --> Q3["Outliers<br/>Quantity≤0: 22,950<br/>Price≤0: 6,207"]
-    QUALITY --> Q4["Description missing<br/>4,382 rows (0.4%) → keep"]
-
-    ROOT --> DECISION["Cleaning decisions"]
-    DECISION --> D1["Drop missing CustomerID<br/>→ cannot segment without it"]
-    DECISION --> D2["Drop returns + outliers<br/>→ not part of purchase behavior"]
-    DECISION --> D3["Derive Revenue field<br/>= Quantity × Price"]
-
-    ROOT --> RESULT["📋 Result:<br/>805,549 rows retained (75%)<br/>5,878 customers · 36,969 orders · £17.7M"]
-
-    style ROOT fill:#6366f1,stroke:#4f46e5,color:#fff
-    style RESULT fill:#fef3c7,stroke:#f39c12,color:#333
-```
-
-### Branch 2 — "What patterns are hidden?" → Four-dimension EDA
-
-```mermaid
-graph TD
-    ROOT["🔍 Four dimensions<br/>of business exploration"]
-
-    ROOT --> TIME["⏰ Time"]
-    TIME --> T1["Monthly trends<br/>Revenue · Orders · Active customers"]
-    TIME --> T2["Finding: strong seasonality<br/>Sep-Nov surges 40%+<br/>Nov peaks (Christmas season)"]
-    TIME --> T3["Implication: start holiday<br/>marketing prep in Q3"]
-
-    ROOT --> GEO["🌍 Geography"]
-    GEO --> G1["Top 10 markets<br/>Revenue by country"]
-    GEO --> G2["Finding: single-market dominance<br/>UK = 83% revenue · 5,350 customers (91%)<br/>EIRE #2 but only 5 customers"]
-    GEO --> G3["Implication: overseas expansion<br/>needs retail vs wholesale segmentation"]
-
-    ROOT --> PROD["📦 Products"]
-    PROD --> P1["Top 20 + Pareto analysis"]
-    PROD --> P2["Finding: long-tail effect<br/>20% products drive 78% revenue<br/>Near Pareto 80/20"]
-    PROD --> P3["Anomaly: PAPER CRAFT<br/>1 buyer · 80K+ units → wholesale"]
-    PROD --> P4["Implication: rec engine<br/>should focus on top SKUs"]
-
-    ROOT --> USER["👥 Users"]
-    USER --> U1["Frequency · Spend · SKU count distributions"]
-    USER --> U2["Finding: power-law distribution<br/>Median spend £899 vs Mean £3,019<br/>Max £608K"]
-    USER --> U3["Implication: cannot design for<br/>the average user → need segmentation"]
-
-    style ROOT fill:#f97316,stroke:#ea580c,color:#fff
-```
-
-### Branch 3 — "How to segment customers?" → RFM model
-
-```mermaid
-graph TD
-    ROOT["🏷️ RFM model<br/>Rule-based customer segmentation"]
-
-    ROOT --> CALC["Step 1: compute metrics"]
-    CALC --> R["R = Recency<br/>Days since last purchase<br/>Lower is better"]
-    CALC --> F["F = Frequency<br/>Unique invoice count<br/>Higher is better"]
-    CALC --> M["M = Monetary<br/>Total spend<br/>Higher is better"]
-
-    ROOT --> SCORE["Step 2: quintile scoring"]
-    SCORE --> SC1["Each dimension scored 1-5<br/>R inverted — fewer days = higher score"]
-    SCORE --> SC2["Frequency has many ties<br/>→ rank(method='first') before qcut"]
-    SCORE --> SC3["Combined into RFM string<br/>e.g. '545' = high R, mid-high F, high M"]
-
-    ROOT --> LABEL["Step 3: label mapping"]
-    LABEL --> SEG["8 customer segments"]
-    SEG --> S1["💎 Loyal high-value<br/>1,300 · 68.4% revenue<br/>R≥4 F≥4 M≥4"]
-    SEG --> S2["🌱 High potential<br/>975 · 13.8% revenue<br/>R≥3 F≥3 M≥3"]
-    SEG --> S3["🚨 At-risk high-value<br/>227 · 5.7% revenue<br/>R≤2 F≥4 M≥4"]
-    SEG --> S4["Other 5 segments<br/>3,376 · 12.1% revenue"]
-
-    ROOT --> KEY["📋 Key finding:<br/>22% of customers contribute 68% revenue<br/>Customer value is highly concentrated"]
-
-    style ROOT fill:#e74c3c,stroke:#dc2626,color:#fff
-    style KEY fill:#fef3c7,stroke:#f39c12,color:#333
-```
-
-### Branch 4 — "Are the segments reliable?" → K-Means validation
-
-```mermaid
-graph TD
-    ROOT["🤖 Data-driven validation<br/>of rule-based segments"]
-
-    ROOT --> PREP["Preprocessing<br/>StandardScaler on R/F/M"]
-
-    ROOT --> KSELECT["Choosing K"]
-    KSELECT --> ELBOW["Elbow method<br/>K=2 to 10 · compute inertia"]
-    KSELECT --> CHOOSE["Elbow at K=4~5<br/>Choose K=5 · comparable to RFM groups"]
-
-    ROOT --> RESULT["Clustering results"]
-    RESULT --> C0["Quality active · 383<br/>R=28 F=28.5 M=£13,935"]
-    RESULT --> C1["Dormant low-value · 1,917<br/>R=471 F=2.2 M=£756"]
-    RESULT --> C2["Super customers · 24<br/>R=22.5 F=119.8 M=£100,927"]
-    RESULT --> C3["Extreme VIP · 4<br/>R=3.5 F=212.5 M=£436,836"]
-    RESULT --> C4["General active · 3,550<br/>R=75.7 F=5.1 M=£1,912"]
-
-    ROOT --> CROSS["Cross-validation<br/>crosstab + heatmap"]
-    CROSS --> X1["✅ Consistent: 87% overlap<br/>on dormant customers"]
-    CROSS --> X2["🔍 New: 4 extreme VIPs<br/>avg £430K · likely wholesale<br/>RFM lumped as 'loyal high-value'"]
-    CROSS --> X3["🔍 New: 24 super customers<br/>avg £100K · RFM missed the tier gap"]
-
-    ROOT --> CONCLUSION["📋 Conclusion:<br/>RFM → clear rules, good for daily ops<br/>K-Means → hidden patterns + outliers<br/>Best used in combination"]
-
-    style ROOT fill:#3498db,stroke:#2563eb,color:#fff
-    style CONCLUSION fill:#fef3c7,stroke:#f39c12,color:#333
-```
-
-### Branch 5 — "What should we do?" → Strategy recommendations
-
-```mermaid
-graph TD
-    ROOT["🎯 Differentiated strategy<br/>by customer segment"]
-
-    ROOT --> PRINCIPLE["Core principle<br/>80% resources on P0-P2<br/>covering 87.9% of revenue"]
-
-    ROOT --> P0["🔴 P0 — Act this week"]
-    P0 --> P0A["At-risk high-value · 227<br/>Root cause: once valuable · avg 341 days inactive<br/>Action: 3-email win-back sequence<br/>+ exclusive high-value coupons<br/>+ phone interviews for churn reasons<br/>KPI: 30-day win-back rate > 15%"]
-
-    ROOT --> P1["🟡 P1 — Launch this month"]
-    P1 --> P1A["Loyal high-value · 1,300<br/>Root cause: revenue lifeline<br/>Action: VIP tier system<br/>+ 48h early access + personalized recs<br/>+ loyalty points to raise switching cost<br/>KPI: quarterly retention > 95%"]
-    P1 --> P1B["High potential · 975<br/>Root cause: largest growth pool<br/>Action: milestone rewards at £5K<br/>+ cross-category recommendations<br/>KPI: high-value conversion > 8%"]
-
-    ROOT --> P2["🟢 P2 — Ongoing"]
-    P2 --> P2A["New · 443<br/>→ 7-day onboarding + 14-day 2nd-order discount"]
-    P2 --> P2B["Dormant · 1,523<br/>→ low-cost outreach · batch 20% test first"]
-
-    ROOT --> AB["🧪 A/B tests"]
-    AB --> AB1["Win-back emails<br/>Control: no action · Treatment: 3-email sequence<br/>Metric: 30-day repurchase · Duration: 4 weeks"]
-    AB --> AB2["Milestone incentives<br/>Control: standard promo · Treatment: spend milestones<br/>Metric: 60-day spend change · Duration: 8 weeks"]
-    AB --> AB3["2nd-order conversion<br/>Control: no action · Treatment: 10% off within 14 days<br/>Metric: 30-day 2nd purchase rate · Duration: 4 weeks"]
-
-    style ROOT fill:#2ecc71,stroke:#16a34a,color:#fff
-    style P0 fill:#fee2e2,stroke:#e74c3c,color:#333
-    style P1 fill:#fef3c7,stroke:#f39c12,color:#333
-    style P2 fill:#dcfce7,stroke:#2ecc71,color:#333
-```
+| Stage | Implemented method | Boundary |
+|---|---|---|
+| **Cleaning** | Drops missing `Customer ID`, cancellation invoices, and nonpositive quantity or price; derives `Revenue` | Returns and invalid rows are excluded from purchasing behavior |
+| **EDA** | Aggregates monthly, country, product, and customer measures | Descriptive analysis only |
+| **RFM** | Uses snapshot date 2011-12-10 and quintile scores; frequency ties use `rank(method="first")` | Eight segments are hand-written business rules |
+| **K-Means** | Standardizes R/F/M, evaluates K=2–10 by elbow shape, then fits K=5 with `random_state=42` | K is heuristic; no silhouette or stability study is included |
+| **Cross-check** | Uses a crosstab and PCA visualization to compare RFM groups and clusters | Cluster labels such as wholesale-like are interpretations |
+| **Strategy** | Converts descriptive segment profiles into priorities, KPIs, and A/B-test proposals | Proposed actions have not been experimentally validated |
 
 ---
 
-## 📈 Key Findings
+<a id="reproduce"></a>
 
-| Dimension | Finding | Product Implication |
-|-----------|---------|-------------------|
-| ⏰ Time | Sales surge 40%+ during Sep–Nov (Christmas season), peaking in Nov | Begin holiday marketing prep in Q3 |
-| 🌍 Geography | UK accounts for 83% of revenue | Overseas expansion requires retail vs. wholesale segmentation |
-| 📦 Products | Top 20% of products drive 78% of revenue | Recommendation engine should focus on top SKUs |
-| 👥 Users | Power-law distribution; median spend only £899 | Cannot design strategy around the "average user" |
+## 🚀 Reproduce
 
----
+The recorded notebook kernel is Python 3.13.5. Dependencies are currently unpinned, and the source workbook is not included.
 
-## 🏷️ Customer Segments
-
-RFM analysis segmented 5,878 customers into 8 groups:
-
-| Segment | Count | Revenue Share | Strategy |
-|---------|-------|--------------|----------|
-| 💎 Loyal High-Value | 1,300 | 68.4% | VIP perks · Personalized recs · Loyalty program |
-| 🌱 High Potential | 975 | 13.8% | Milestone rewards · Category expansion · Flash sales |
-| 🚨 At-Risk High-Value | 227 | 5.7% | Urgent win-back · Exclusive coupons · Churn interviews |
-| 👤 Regular | 1,102 | 4.6% | Standard maintenance |
-| 💤 Dormant | 1,523 | 3.8% | Low-cost outreach · Batch testing |
-| 👋 New | 443 | 2.2% | Onboarding emails · Second-order incentives |
-| 🔄 Frequent Low-Spend | 182 | 0.9% | Cross-sell · AOV uplift |
-| ⚠️ At-Risk Regular | 126 | 0.6% | Monitor · Low priority |
-
----
-
-## 🤖 K-Means Clustering Validation
-
-Applied K-Means (K=5) on standardized RFM features to cross-validate the rule-based segmentation:
-
-- ✅ **Consistent**: 87% of dormant customers were identified by both methods
-- 🔍 **New discovery**: K-Means detected 4 "extreme VIPs" (avg. spend £430K, likely wholesale) and 24 "super customers" (avg. £100K) that RFM failed to distinguish
-- 💡 **Conclusion**: RFM excels in interpretability for daily operations; K-Means uncovers hidden patterns and extreme outliers. Best used in combination.
-
----
-
-## 💡 Strategy Prioritization
-
-```
-P0 🚨 At-Risk High-Value    →  Win-back this week  (227 · proven high-LTV users)
-P1 💎 Loyal High-Value      →  Launch VIP program   (1,300 · revenue lifeline)
-P2 🌱 High Potential        →  Milestone incentives (975 · largest growth pool)
-P3 👋 New Customers         →  Second-order nudge   (443 · long-term cultivation)
-P4 💤 Dormant               →  Low-cost batch test  (1,523 · don't over-invest)
-
-Core principle: Allocate 80% of resources to P0–P2, covering 87.9% of revenue.
-```
-
----
-
-## 🛠️ Tech Stack
-
-| Module | Tools |
-|--------|-------|
-| Data Processing | Python · pandas · numpy |
-| Visualization | matplotlib · seaborn · plotly |
-| Machine Learning | scikit-learn (KMeans · StandardScaler · PCA) |
-| Dashboard | Streamlit |
-
----
-
-## 📁 Project Structure
-
-```
-ecommerce-user-analysis/
-├── notebooks/
-│   ├── 01_data_cleaning.ipynb    # Data cleaning & preprocessing
-│   ├── 02_eda.ipynb              # Exploratory data analysis
-│   ├── 03_rfm_analysis.ipynb     # RFM customer segmentation
-│   ├── 04_clustering.ipynb       # K-Means clustering validation
-│   └── 05_insights.ipynb         # Product strategy recommendations
-├── dashboard/
-│   └── app.py                    # Streamlit interactive dashboard
-├── data/                         # Data directory (not uploaded)
-└── docs/                         # Documentation & screenshots
-```
-
----
-
-## 🚀 Quick Start
-
-```bash
-# Clone
-git clone https://github.com/wodaima/ecommerce-user-analysis.git
+```powershell
+git clone https://github.com/okht/ecommerce-user-analysis.git
 cd ecommerce-user-analysis
 
-# Environment
 python -m venv .venv
-.venv\Scripts\activate        # Windows
-# source .venv/bin/activate   # Mac/Linux
+.\.venv\Scripts\Activate.ps1
+python -m pip install pandas numpy matplotlib seaborn plotly scikit-learn streamlit openpyxl jupyter
 
-# Dependencies
-pip install pandas numpy matplotlib seaborn plotly scikit-learn streamlit openpyxl jupyter
-
-# Data — download from link below and place in data/
-# https://archive.ics.uci.edu/dataset/502/online+retail+ii
-
-# Run notebooks
-jupyter notebook
-
-# Launch dashboard
-cd dashboard
-streamlit run app.py
+New-Item -ItemType Directory -Force data
 ```
 
+Download `online_retail_II.xlsx` from the [official UCI dataset page](https://archive.ics.uci.edu/dataset/502/online+retail+ii) and place it at `data/online_retail_II.xlsx`. Then execute the real notebook filenames in order:
+
+```powershell
+$notebooks = @(
+  'notebook/01_data_cleaning.ipynb',
+  'notebook/02_eda.ipynb.ipynb',
+  'notebook/03_rfm_analysis.ipynb.ipynb',
+  'notebook/04_clustering.ipynb.ipynb',
+  'notebook/05_insights.ipynb.ipynb'
+)
+
+foreach ($notebook in $notebooks) {
+  jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=600 --stdout $notebook > $null
+  if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+}
+```
+
+This execution writes the three generated CSV files under `data/`.
+
 ---
 
-## 📊 Dashboard Preview
+<a id="generated-files"></a>
 
-> Screenshots / GIF coming soon
+## 📦 Generated files
+
+| File | Producer | Consumer |
+|---|---|---|
+| **`data/retail_cleaned.csv`** | `01_data_cleaning.ipynb` | EDA, RFM, and Dashboard |
+| **`data/rfm_result.csv`** | `03_rfm_analysis.ipynb.ipynb` | K-Means cross-check |
+| **`data/rfm_clustered.csv`** | `04_clustering.ipynb.ipynb` | Strategy notebook and Dashboard |
+
+These files are ignored by Git and are not present in a fresh clone.
 
 ---
 
-## 📝 License
+<a id="dashboard"></a>
 
-MIT
+## 📊 Dashboard
+
+`dashboard/app.py` reads the generated CSV files from the repository-local `data/` directory and provides three Streamlit tabs: sales trends, customer segments, and strategy recommendations.
+
+```powershell
+streamlit run dashboard/app.py
+```
+
+Run the notebook pipeline first. No Dashboard screenshot or hosted deployment is included, and the page imports a font stylesheet from Google Fonts.
+
+---
+
+<a id="data-and-citation"></a>
+
+## 🛡️ Data and citation
+
+| Topic | Current status |
+|---|---|
+| **Source** | UCI Machine Learning Repository, Online Retail II |
+| **Citation** | Chen, D. (2012). *Online Retail II* [Dataset]. DOI: [10.24432/C5CG6D](https://doi.org/10.24432/C5CG6D) |
+| **Dataset license** | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) according to the UCI page |
+| **Repository code license** | No code license has been declared |
+| **Bundled data** | Raw workbook and generated CSV files are excluded from Git |
+| **Identifiers** | The dataset contains numeric customer identifiers; review derived files before sharing them |
+| **External request** | The Dashboard stylesheet requests Google Fonts; analysis code otherwise reads local data files |
+
+The dataset license applies to the UCI data. It does not license this repository's code.
+
+---
+
+<a id="verification"></a>
+
+## 🧪 Verification
+
+The following non-destructive checks validate Python syntax and the five notebook documents:
+
+```powershell
+python -c "import ast, pathlib; ast.parse(pathlib.Path('dashboard/app.py').read_text(encoding='utf-8')); print('dashboard/app.py: syntax OK')"
+python -c "import nbformat, pathlib; files=sorted(pathlib.Path('notebook').glob('*.ipynb*')); [nbformat.validate(nbformat.read(p, as_version=4)) for p in files]; print(f'{len(files)} notebooks: nbformat validation OK')"
+```
+
+| Check | Status |
+|---|---|
+| **Dashboard AST** | Passed locally |
+| **Notebook JSON and schema** | Five files passed locally |
+| **End-to-end notebook execution** | Not run because the source workbook is not bundled |
+| **Dashboard smoke test** | Not run because generated CSV files are not bundled |
+| **Automated tests** | No test suite is included |
+
+---
+
+<a id="project-structure"></a>
+
+## 📁 Project structure
+
+```text
+ecommerce-user-analysis/
+├── dashboard/
+│   └── app.py
+├── notebook/
+│   ├── 01_data_cleaning.ipynb
+│   ├── 02_eda.ipynb.ipynb
+│   ├── 03_rfm_analysis.ipynb.ipynb
+│   ├── 04_clustering.ipynb.ipynb
+│   └── 05_insights.ipynb.ipynb
+├── .gitignore
+├── README.md
+├── README_CN.md
+├── README_ES.md
+├── README_DE.md
+├── README_JA.md
+├── README_RU.md
+├── README_PT.md
+└── README_KO.md
+```
+
+The repeated `.ipynb.ipynb` extensions are the current filenames and are preserved for reproducibility.
+
+---
+
+<a id="limitations"></a>
+
+## 📌 Limitations
+
+- The UCI workbook and generated CSV files are not bundled.
+- Dependencies are unpinned, and no requirements or lock file is included.
+- The saved notebook outputs were inspected, but the full pipeline was not rerun during this README update.
+- K=5 is selected heuristically from an elbow plot; no silhouette, stability, or holdout analysis is included.
+- Segment recommendations, KPI targets, and A/B-test designs are hypotheses with no intervention results.
+- The dataset covers 2009–2011 and should not be presented as current market evidence.
+- The Dashboard requires generated CSV files and has no hosted demo or committed preview.
+- No automated tests, CI workflow, tag, or release is included.
+- The repository code has no declared license; the dataset's CC BY 4.0 license remains separate.
+
+Issues and pull requests are welcome.
+
+---
+
+<div align="center">
+
+**Keep every customer segment traceable to its cleaning rules, evidence, and limits.**
+
+<br>
+
+Code license not declared · Maintained by [okht](https://github.com/okht)
+
+</div>
